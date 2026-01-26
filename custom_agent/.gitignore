@@ -1,0 +1,37 @@
+# Ignore build artifacts
+build/
+*.exe
+wazuh-agent
+wazuh-agent-*
+
+# Ignore Go build cache
+*.o
+*.a
+*.so
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore config with sensitive data
+config.json
+
+# Keep example config
+!config.example.json
+
+# Ignore logs
+*.log
+
+# Ignore Go vendor
+vendor/
+
+# Ignore test coverage
+*.out
+coverage.html

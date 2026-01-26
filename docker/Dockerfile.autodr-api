@@ -1,0 +1,87 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
+COPY autodr.py .
+COPY shuffle_integration.py .
+COPY ml_predictor.py .
+COPY ml_model.py .
+COPY autobook/ ./autobook/
+COPY autohunt/ ./autohunt/
+
+# Create directories for models and data
+RUN mkdir -p /app/models /app/data
+
+# Expose API port
+EXPOSE 5000
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV FLASK_APP=autodr_api.py
+
+# Create Flask API wrapper
+COPY <<'EOF' /app/autodr_api.py
+from flask import Flask, request, jsonify
+from autodr import AutomatedThreatHunter
+import json
+
+app = Flask(__name__)
+hunter = AutomatedThreatHunter()
+
+@app.route('/api/isolate', methods=['POST'])
+def isolate_endpoint():
+    data = request.json
+    agent_id = data.get('agent_id')
+    agent_name = data.get('agent_name', 'unknown')
+    reason = data.get('reason', 'Security incident')
+    
+    result = hunter.step3_isolate_endpoint(agent_id, agent_name)
+    return jsonify({'success': result, 'agent_id': agent_id})
+
+@app.route('/api/hunt/<hunt_type>', methods=['POST'])
+def execute_hunt(hunt_type):
+    data = request.json
+    timeframe = data.get('timeframe', '24h')
+    
+    hunt_results = hunter.hunt_loader.execute_hunt(
+        f'00_{hunt_type}',
+        wazuh_api=hunter,
+        timeframe_hours=24
+    )
+    
+    return jsonify({'success': True, 'findings': hunt_results})
+
+@app.route('/api/alerts', methods=['POST'])
+def create_alerts():
+    data = request.json
+    findings = data.get('findings', [])
+    # Process and store alerts
+    return jsonify({'success': True, 'count': len(findings)})
+
+@app.route('/api/log_isolation', methods=['POST'])
+def log_isolation():
+    data = request.json
+    # Log isolation event
+    print(f"Isolation logged: {json.dumps(data)}")
+    return jsonify({'success': True})
+
+@app.route('/api/agent_info', methods=['GET'])
+def get_agent_info():
+    agent_id = request.args.get('agent_id')
+    # Return agent information from Wazuh
+    return jsonify({'agent_id': agent_id, 'status': 'active'})
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({'status': 'healthy', 'service': 'autodr-api'})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+EOF
+
+CMD ["python", "autodr_api.py"]

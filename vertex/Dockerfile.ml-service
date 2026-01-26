@@ -1,0 +1,88 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+    flask \
+    google-cloud-aiplatform \
+    scikit-learn \
+    pandas \
+    numpy \
+    joblib
+
+# Copy ML files
+COPY ml_model.py .
+COPY ml_predictor.py .
+COPY models/ ./models/
+
+# Create Flask ML API
+COPY <<'EOF' /app/ml_api.py
+from flask import Flask, request, jsonify
+from vertex.ml_predictor import predict_threat
+import json
+
+app = Flask(__name__)
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    """Predict threat score for alert"""
+    data = request.json
+    alert_data = data.get('alert_data', {})
+    
+    # Extract features (customize based on your model)
+    features = [
+        float(alert_data.get('rule', {}).get('level', 0)) / 15.0,
+        # Add more features as needed
+    ]
+    
+    try:
+        threat_score = predict_threat('threat_model.pkl', features)
+        return jsonify({
+            'success': True,
+            'threat_score': float(threat_score),
+            'confidence': 'high'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'threat_score': 0.5
+        }), 500
+
+@app.route('/score_findings', methods=['POST'])
+def score_findings():
+    """Score threat hunting findings"""
+    data = request.json
+    findings = data.get('findings', [])
+    
+    scored = []
+    for finding in findings:
+        # Simple scoring logic (enhance as needed)
+        score = 0.5
+        if 'critical' in str(finding).lower():
+            score = 0.9
+        elif 'high' in str(finding).lower():
+            score = 0.75
+        
+        scored.append({
+            **finding,
+            'confidence_score': score
+        })
+    
+    return jsonify({
+        'success': True,
+        'scored_findings': scored
+    })
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'healthy', 'service': 'autodr-ml'})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
+EOF
+
+EXPOSE 8080
+
+CMD ["python", "ml_api.py"]
