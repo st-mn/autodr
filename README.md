@@ -59,8 +59,8 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '50px', 'subgraphFontSize': '40px', 'edgeFontSize': '30px', 'nodeSpacing': 200, 'rankSpacing': 250, 'clusterPadding': 50 } } }%%
-graph TB
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '42px', 'edgeFontSize': '30px', 'nodeSpacing': 400, 'rankSpacing': 500, 'clusterPadding': 100 } } }%%
+graph LR
     subgraph Endpoints["ENDPOINTS & AGENTS"]
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
         Linux["Linux Endpoint<br/>Wazuh Agent"]
@@ -168,13 +168,14 @@ graph TB
     MISPIntegration -.-> MISP
     IRISIOC -.->|IOC Sync| MISP
 
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:2px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
-    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:2px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:2px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:3px
+    %% Adding internal padding to the boxes to prevent text touching borders
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:4px,padding:40px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:4px,padding:40px
+    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:4px,padding:40px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:4px,padding:40px
+    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:4px,padding:40px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:4px,padding:40px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:6px,padding:40px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
@@ -182,6 +183,7 @@ graph TB
     class PubSub,Dataflow,BigQuery,VertexAI,CloudRun gcp
     class AUTODR,AutoHunt,AutoBook,MLPipeline,Shuffle automation
     class IRIS,IRISWeb,IRISTimeline,IRISIOC casemanagement
+    class AlertQueue,ShuffleWorkflows,ResponsePlaybooks,NotificationEngine,CrowdStrikeResponse,SplunkAlert,MISPIntegration response
 ```
 
 ## Modules
