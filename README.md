@@ -59,9 +59,9 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '32px', 'subgraphFontSize': '30px', 'edgeFontSize': '30px', 'nodeSpacing': 30, 'rankSpacing': 30, 'clusterPadding': 150, 'clusterBorderRadius': 60 } } }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '23px', 'subgraphFontSize': '30px', 'edgeFontSize': '30px', 'nodeSpacing': 30, 'rankSpacing': 30, 'clusterPadding': 150, 'clusterBorderRadius': 60 } } }%%
 graph TB
-    subgraph Endpoints["ENDPOINTS\n& AGENTS"]
+    subgraph Endpoints["ENDPOINT AGENTS"]
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
         Linux["Linux Endpoint<br/>Wazuh Agent"]
         Debian["Debian Endpoint<br/>Wazuh Agent"]
@@ -86,7 +86,7 @@ graph TB
         PubSub["Pub/Sub<br/>Event Streaming"]
         Dataflow["Dataflow<br/>Stream Processing"]
         BigQuery["BigQuery<br/>Data Warehouse"]
-        VertexAI["Vertex AI<br/>ML Platform"]
+        VertexAI["Vertex AI<br/>ML Platform<br/>Continous Training "]
         CloudRun["Cloud Run<br/>Inference Service"]
     end
 
@@ -94,7 +94,6 @@ graph TB
         AUTODR["AUTODR Engine<br/>autodr.py"]
         AutoHunt["autohunt/<br/>Threat Hunting"]
         AutoBook["autobook/<br/>IR Runbooks"]
-        MLPipeline["vertex/<br/>ML Pipeline"]
         Shuffle["shuffle/<br/>SOAR Workflows"]
     end
 
@@ -102,7 +101,6 @@ graph TB
         IRIS["iris/<br/>DFIR-IRIS Platform"]
         IRISWeb["IRIS Web UI<br/>Collaborative Investigation"]
         IRISTimeline["Timeline Analysis<br/>Evidence Tracking"]
-        IRISIOC["IOC Management<br/>Asset Tracking"]
     end
 
     subgraph ResponseActions["RESPONSE&nbsp;&&nbsp;ACTIONS<br/><br/>&nbsp;"]
@@ -116,20 +114,21 @@ graph TB
     end
 
     %% Logic Connections
+    MISP --> WazuhCollector
     WazuhManager --> WazuhCollector
     Splunk --> SplunkCollector
     CrowdStrike --> CrowdStrikeCollector
     WazuhCollector & SplunkCollector & CrowdStrikeCollector --> PubSub
     PubSub --> Dataflow --> BigQuery --> VertexAI --> CloudRun
-    CloudRun --> AUTODR
+    CloudRun <--> AUTODR
     AUTODR --> AutoHunt & AutoBook & Shuffle & IRIS
     
-    MacOS & Linux & Debian & Windows --> WazuhManager
-    AutoHunt --> AlertQueue
+    MacOS & Linux & Debian & Windows & CustomAgent --> WazuhManager
+    AutoBook & AutoHunt --> AlertQueue
     Shuffle --> ShuffleWorkflows --> AlertQueue
     AlertQueue --> ResponsePlaybooks & IRIS
     ResponsePlaybooks --> NotificationEngine & CrowdStrikeResponse & SplunkAlert & MISPIntegration
-    IRIS --> IRISWeb & IRISTimeline & IRISIOC
+    IRIS --> IRISWeb & IRISTimeline 
 
     %% Styling with forced height to prevent overlap
     classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:1px,padding:0px,min-height:0px
