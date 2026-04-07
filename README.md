@@ -59,7 +59,7 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '10px', 'edgeFontSize': '30px', 'nodeSpacing': 400, 'rankSpacing': 400, 'clusterPadding': 50 } } }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '10px', 'edgeFontSize': '30px', 'nodeSpacing': 200, 'rankSpacing': 300, 'clusterPadding': 100 } } }%%
 graph TB
     subgraph Endpoints[" "]
         Header1["🛑&nbsp;ENDPOINTS&nbsp;&&nbsp;AGENTS"]:::sectionHeader --> MacOS
@@ -122,7 +122,7 @@ graph TB
         MISPIntegration["misp/<br/>IOC Management"]
     end
 
-    %% High-level Logic Connections
+    %% Logic Connections
     WazuhManager --> WazuhCollector
     Splunk --> SplunkCollector
     CrowdStrike --> CrowdStrikeCollector
@@ -139,13 +139,13 @@ graph TB
     ResponsePlaybooks --> NotificationEngine & CrowdStrikeResponse & SplunkAlert & MISPIntegration
     IRIS --> IRISWeb & IRISTimeline & IRISIOC
 
-    %% Updated Styling with Forced Widths
-    classDef sectionHeader fill:#333,color:#fff,stroke:#000,stroke-width:2px,font-weight:bold,width:1800px,min-height:120px
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:5px,width:800px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:5px,width:800px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:5px,width:800px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:5px,width:800px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:8px,width:800px
+    %% Styling with High Padding instead of Width
+    classDef sectionHeader fill:#333,color:#fff,stroke:#000,stroke-width:2px,font-weight:bold,padding:60px
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:5px,padding:40px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:5px,padding:40px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:5px,padding:40px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:5px,padding:40px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:8px,padding:40px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
