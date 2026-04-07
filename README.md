@@ -59,9 +59,10 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '58px', 'edgeFontSize': '30px', 'nodeSpacing': 350, 'rankSpacing': 400, 'clusterPadding': 120 } } }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '10px', 'edgeFontSize': '30px', 'nodeSpacing': 300, 'rankSpacing': 300, 'clusterPadding': 50 } } }%%
 graph TB
-    subgraph Endpoints["ENDPOINTS & AGENTS"]
+    subgraph Endpoints[" "]
+        Header1["🛑 ENDPOINTS & AGENTS"]:::sectionHeader --> MacOS
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
         Linux["Linux Endpoint<br/>Wazuh Agent"]
         Debian["Debian Endpoint<br/>Wazuh Agent"]
@@ -69,20 +70,23 @@ graph TB
         CustomAgent["Custom Endpoint<br/>Custom Agent"]
     end
 
-    subgraph SecurityTools["SECURITY TOOLS"]
+    subgraph SecurityTools[" "]
+        Header2["🛡️ SECURITY TOOLS"]:::sectionHeader --> MISP
         MISP["MISP<br/>Threat Intelligence"]
         WazuhManager["Wazuh Manager<br/>Central Monitoring"]
         Splunk["Splunk SIEM<br/>Log Analysis"]
         CrowdStrike["CrowdStrike Falcon<br/>Endpoint Protection"]
     end
 
-    subgraph DataCollection["DATA COLLECTION LAYER"]
+    subgraph DataCollection[" "]
+        Header3["📊 DATA COLLECTION LAYER"]:::sectionHeader --> WazuhCollector
         WazuhCollector["wazuh/<br/>Wazuh Collector"]
         SplunkCollector["splunk/<br/>Splunk Collector"]
         CrowdStrikeCollector["crowdstrike/<br/>CrowdStrike Collector"]
     end
 
-    subgraph GCP["GOOGLE CLOUD PLATFORM"]
+    subgraph GCP[" "]
+        Header4["☁️ GOOGLE CLOUD PLATFORM"]:::sectionHeader --> PubSub
         PubSub["Pub/Sub<br/>Event Streaming"]
         Dataflow["Dataflow<br/>Stream Processing"]
         BigQuery["BigQuery<br/>Data Warehouse"]
@@ -90,7 +94,8 @@ graph TB
         CloudRun["Cloud Run<br/>Inference Service"]
     end
 
-    subgraph AutomationLayer["AUTOMATION & ORCHESTRATION"]
+    subgraph AutomationLayer[" "]
+        Header5["🤖 AUTOMATION & ORCHESTRATION"]:::sectionHeader --> AUTODR
         AUTODR["AUTODR Engine<br/>autodr.py"]
         AutoHunt["autohunt/<br/>Threat Hunting"]
         AutoBook["autobook/<br/>IR Runbooks"]
@@ -98,14 +103,16 @@ graph TB
         Shuffle["shuffle/<br/>SOAR Workflows"]
     end
 
-    subgraph CaseManagement["CASE MANAGEMENT & COLLABORATION"]
+    subgraph CaseManagement[" "]
+        Header6["💼 CASE MANAGEMENT"]:::sectionHeader --> IRIS
         IRIS["iris/<br/>DFIR-IRIS Platform"]
         IRISWeb["IRIS Web UI<br/>Collaborative Investigation"]
         IRISTimeline["Timeline Analysis<br/>Evidence Tracking"]
         IRISIOC["IOC Management<br/>Asset Tracking"]
     end
 
-    subgraph ResponseActions["RESPONSE & ACTIONS"]
+    subgraph ResponseActions[" "]
+        Header7["⚡ RESPONSE & ACTIONS"]:::sectionHeader --> AlertQueue
         AlertQueue["Alert Queue<br/>ML Scoring"]
         ShuffleWorkflows["Shuffle Workflows<br/>Visual Automation"]
         ResponsePlaybooks["AutoBook Runbooks<br/>Automated Remediation"]
@@ -115,53 +122,36 @@ graph TB
         MISPIntegration["misp/<br/>IOC Management"]
     end
 
-    %% Logic Connections
-    MacOS & Linux & Debian & Windows --> WazuhManager
+    %% Logic Connections (Connecting to Headers to ensure top-down flow)
     WazuhManager --> WazuhCollector
-    MISP --> WazuhManager
     Splunk --> SplunkCollector
     CrowdStrike --> CrowdStrikeCollector
-
     WazuhCollector & SplunkCollector & CrowdStrikeCollector --> PubSub
     PubSub --> Dataflow --> BigQuery --> VertexAI --> CloudRun
-
     CloudRun --> AUTODR
-    BigQuery --> MLPipeline --> AUTODR
-
     AUTODR --> AutoHunt & AutoBook & Shuffle & IRIS
+    
+    %% Specific Data Links
+    MacOS & Linux & Debian & Windows --> WazuhManager
     AutoHunt --> AlertQueue
     Shuffle --> ShuffleWorkflows --> AlertQueue
     AlertQueue --> ResponsePlaybooks & IRIS
-
     ResponsePlaybooks --> NotificationEngine & CrowdStrikeResponse & SplunkAlert & MISPIntegration
-
     IRIS --> IRISWeb & IRISTimeline & IRISIOC
-    
-    AutoHunt -.->|Hunt Evidence| IRIS
-    ResponsePlaybooks -.->|Containment Actions| IRIS
-    AlertQueue -.->|High Severity Cases| IRIS
 
-    CrowdStrikeResponse -.-> CrowdStrike
-    SplunkAlert -.-> Splunk
-    MISPIntegration -.-> MISP
-    IRISIOC -.->|IOC Sync| MISP
-
-    %% Stylings with added padding to prevent text-to-border touching
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:5px,padding:30px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:5px,padding:30px
-    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:5px,padding:30px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:5px,padding:30px
-    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:5px,padding:30px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:5px,padding:30px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:8px,padding:30px
+    %% Styling
+    classDef sectionHeader fill:#333,color:#fff,stroke:#000,stroke-width:2px,font-weight:bold,min-width:1000px
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:5px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:5px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:5px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:5px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:8px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
-    class WazuhCollector,SplunkCollector,CrowdStrikeCollector collection
     class PubSub,Dataflow,BigQuery,VertexAI,CloudRun gcp
-    class AUTODR,AutoHunt,AutoBook,MLPipeline,Shuffle automation
     class IRIS,IRISWeb,IRISTimeline,IRISIOC casemanagement
-    class AlertQueue,ShuffleWorkflows,ResponsePlaybooks,NotificationEngine,CrowdStrikeResponse,SplunkAlert,MISPIntegration response
+    class AlertQueue,ShuffleWorkflows,ResponsePlaybooks,NotificationEngine response
 ```
 
 ## Modules
