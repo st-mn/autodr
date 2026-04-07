@@ -59,7 +59,7 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '18px', 'subgraphFontSize': '22px', 'edgeFontSize': '16px' } } }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '28px', 'subgraphFontSize': '32px', 'edgeFontSize': '26px' } } }%%
 graph TB
     subgraph Endpoints["ENDPOINTS & AGENTS"]
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
