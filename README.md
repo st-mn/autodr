@@ -59,17 +59,7 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 
-  'theme': 'base', 
-  'themeVariables': { 
-    'fontSize': '45px', 
-    'subgraphFontSize': '50px', 
-    'edgeFontSize': '28px',
-    'nodeSpacing': 300,
-    'rankSpacing': 400,
-    'padding': 100
-  } 
-} }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '50px', 'edgeFontSize': '30px', 'nodeSpacing': 500, 'rankSpacing': 600, 'clusterPadding': 250 } } }%%
 graph TB
     subgraph Endpoints["ENDPOINTS & AGENTS"]
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
@@ -125,27 +115,49 @@ graph TB
         MISPIntegration["misp/<br/>IOC Management"]
     end
 
-    %% Connections
-    MacOS & Linux & Debian & Windows & CustomAgent --> WazuhManager
+    MacOS --> WazuhManager
+    Linux --> WazuhManager
+    Debian --> WazuhManager
+    Windows --> WazuhManager
+    CustomAgent --> WazuhManager
+
     WazuhManager --> WazuhCollector
     MISP --> WazuhManager
     Splunk --> SplunkCollector
     CrowdStrike --> CrowdStrikeCollector
 
-    WazuhCollector & SplunkCollector & CrowdStrikeCollector --> PubSub
-    PubSub --> Dataflow --> BigQuery --> VertexAI --> CloudRun
+    WazuhCollector --> PubSub
+    SplunkCollector --> PubSub
+    CrowdStrikeCollector --> PubSub
+
+    PubSub --> Dataflow
+    Dataflow --> BigQuery
+    BigQuery --> VertexAI
+    VertexAI --> CloudRun
 
     CloudRun --> AUTODR
-    BigQuery --> MLPipeline --> AUTODR
+    BigQuery --> MLPipeline
+    MLPipeline --> AUTODR
 
-    AUTODR --> AutoHunt & AutoBook & Shuffle & IRIS
+    AUTODR --> AutoHunt
+    AUTODR --> AutoBook
+    AUTODR --> Shuffle
+    AUTODR --> IRIS
+
     AutoHunt --> AlertQueue
-    Shuffle --> ShuffleWorkflows --> AlertQueue
-    AlertQueue --> ResponsePlaybooks & IRIS
+    Shuffle --> ShuffleWorkflows
+    ShuffleWorkflows --> AlertQueue
+    AlertQueue --> ResponsePlaybooks
+    AlertQueue --> IRIS
 
-    ResponsePlaybooks --> NotificationEngine & CrowdStrikeResponse & SplunkAlert & MISPIntegration
+    ResponsePlaybooks --> NotificationEngine
+    ResponsePlaybooks --> CrowdStrikeResponse
+    ResponsePlaybooks --> SplunkAlert
+    ResponsePlaybooks --> MISPIntegration
 
-    IRIS --> IRISWeb & IRISTimeline & IRISIOC
+    IRIS --> IRISWeb
+    IRIS --> IRISTimeline
+    IRIS --> IRISIOC
     
     AutoHunt -.->|Hunt Evidence| IRIS
     ResponsePlaybooks -.->|Containment Actions| IRIS
@@ -156,18 +168,23 @@ graph TB
     MISPIntegration -.-> MISP
     IRISIOC -.->|IOC Sync| MISP
 
-    %% Stylings compatible with Beautiful Mermaid Enriched Mode
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:4px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:4px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:4px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:4px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:6px
+    %% Force larger nodes and thicker borders for the 62px font
+    classDef default font-size:62px
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:5px,height:200px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:5px,height:200px
+    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:5px,height:200px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:5px,height:200px
+    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:5px,height:200px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:5px,height:200px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:8px,height:200px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
+    class WazuhCollector,SplunkCollector,CrowdStrikeCollector collection
     class PubSub,Dataflow,BigQuery,VertexAI,CloudRun gcp
+    class AUTODR,AutoHunt,AutoBook,MLPipeline,Shuffle automation
     class IRIS,IRISWeb,IRISTimeline,IRISIOC casemanagement
-    class AlertQueue,ShuffleWorkflows,ResponsePlaybooks,NotificationEngine response
+    class AlertQueue,ShuffleWorkflows,ResponsePlaybooks,NotificationEngine,CrowdStrikeResponse,SplunkAlert,MISPIntegration response
 ```
 
 ## Modules
