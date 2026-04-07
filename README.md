@@ -59,34 +59,30 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '10px', 'edgeFontSize': '30px', 'nodeSpacing': 300, 'rankSpacing': 300, 'clusterPadding': 80 } } }%%
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '32px', 'subgraphFontSize': '30px', 'edgeFontSize': '30px', 'nodeSpacing': 30, 'rankSpacing': 30, 'clusterPadding': 150, 'clusterBorderRadius': 60 } } }%%
 graph TB
-    subgraph Endpoints[" "]
-        Header1["<div style='min-width:1200px; padding:40px;'>🛑&nbsp;ENDPOINTS&nbsp;&&nbsp;AGENTS</div>"]:::sectionHeader --> MacOS
-        MacOS["<div style='padding:20px;'>macOS Endpoint<br/>Wazuh Agent</div>"]
-        Linux["<div style='padding:20px;'>Linux Endpoint<br/>Wazuh Agent</div>"]
-        Debian["<div style='padding:20px;'>Debian Endpoint<br/>Wazuh Agent</div>"]
-        Windows["<div style='padding:20px;'>Windows Endpoint<br/>Wazuh Agent</div>"]
-        CustomAgent["<div style='padding:20px;'>Custom Endpoint<br/>Custom Agent</div>"]
+    subgraph Endpoints["ENDPOINTS\n& AGENTS"]
+        MacOS["macOS Endpoint<br/>Wazuh Agent"]
+        Linux["Linux Endpoint<br/>Wazuh Agent"]
+        Debian["Debian Endpoint<br/>Wazuh Agent"]
+        Windows["Windows Endpoint<br/>Wazuh Agent"]
+        CustomAgent["Custom Endpoint<br/>Custom Agent"]
     end
 
-    subgraph SecurityTools[" "]
-        Header2["<div style='min-width:1200px; padding:40px;'>🛡️&nbsp;SECURITY&nbsp;TOOLS</div>"]:::sectionHeader --> MISP
+    subgraph SecurityTools["SECURITY&nbsp;TOOLS<br/><br/>&nbsp;"]
         MISP["MISP<br/>Threat Intelligence"]
         WazuhManager["Wazuh Manager<br/>Central Monitoring"]
         Splunk["Splunk SIEM<br/>Log Analysis"]
         CrowdStrike["CrowdStrike Falcon<br/>Endpoint Protection"]
     end
 
-    subgraph DataCollection[" "]
-        Header3["<div style='min-width:1200px; padding:40px;'>📊&nbsp;DATA&nbsp;COLLECTION&nbsp;LAYER</div>"]:::sectionHeader --> WazuhCollector
+    subgraph DataCollection["DATA&nbsp;COLLECTION&nbsp;LAYER<br/><br/>&nbsp;"]
         WazuhCollector["wazuh/<br/>Wazuh Collector"]
         SplunkCollector["splunk/<br/>Splunk Collector"]
         CrowdStrikeCollector["crowdstrike/<br/>CrowdStrike Collector"]
     end
 
-    subgraph GCP[" "]
-        Header4["<div style='min-width:1200px; padding:40px;'>☁️&nbsp;GOOGLE&nbsp;CLOUD&nbsp;PLATFORM</div>"]:::sectionHeader --> PubSub
+    subgraph GCP["GOOGLE&nbsp;CLOUD&nbsp;PLATFORM<br/><br/>&nbsp;"]
         PubSub["Pub/Sub<br/>Event Streaming"]
         Dataflow["Dataflow<br/>Stream Processing"]
         BigQuery["BigQuery<br/>Data Warehouse"]
@@ -94,8 +90,7 @@ graph TB
         CloudRun["Cloud Run<br/>Inference Service"]
     end
 
-    subgraph AutomationLayer[" "]
-        Header5["<div style='min-width:1200px; padding:40px;'>🤖&nbsp;AUTOMATION&nbsp;&&nbsp;ORCHESTRATION</div>"]:::sectionHeader --> AUTODR
+    subgraph AutomationLayer["AUTOMATION&nbsp;&&nbsp;ORCHESTRATION<br/><br/>&nbsp;"]
         AUTODR["AUTODR Engine<br/>autodr.py"]
         AutoHunt["autohunt/<br/>Threat Hunting"]
         AutoBook["autobook/<br/>IR Runbooks"]
@@ -103,16 +98,14 @@ graph TB
         Shuffle["shuffle/<br/>SOAR Workflows"]
     end
 
-    subgraph CaseManagement[" "]
-        Header6["<div style='min-width:1200px; padding:40px;'>💼&nbsp;CASE&nbsp;MANAGEMENT</div>"]:::sectionHeader --> IRIS
+    subgraph CaseManagement["CASE&nbsp;MANAGEMENT<br/><br/>&nbsp;"]
         IRIS["iris/<br/>DFIR-IRIS Platform"]
         IRISWeb["IRIS Web UI<br/>Collaborative Investigation"]
         IRISTimeline["Timeline Analysis<br/>Evidence Tracking"]
         IRISIOC["IOC Management<br/>Asset Tracking"]
     end
 
-    subgraph ResponseActions[" "]
-        Header7["<div style='min-width:1200px; padding:40px;'>⚡&nbsp;RESPONSE&nbsp;&&nbsp;ACTIONS</div>"]:::sectionHeader --> AlertQueue
+    subgraph ResponseActions["RESPONSE&nbsp;&&nbsp;ACTIONS<br/><br/>&nbsp;"]
         AlertQueue["Alert Queue<br/>ML Scoring"]
         ShuffleWorkflows["Shuffle Workflows<br/>Visual Automation"]
         ResponsePlaybooks["AutoBook Runbooks<br/>Automated Remediation"]
@@ -122,7 +115,7 @@ graph TB
         MISPIntegration["misp/<br/>IOC Management"]
     end
 
-    %% Flow Connections
+    %% Logic Connections
     WazuhManager --> WazuhCollector
     Splunk --> SplunkCollector
     CrowdStrike --> CrowdStrikeCollector
@@ -138,13 +131,12 @@ graph TB
     ResponsePlaybooks --> NotificationEngine & CrowdStrikeResponse & SplunkAlert & MISPIntegration
     IRIS --> IRISWeb & IRISTimeline & IRISIOC
 
-    %% CSS Classes
-    classDef sectionHeader fill:#222,color:#fff,stroke:#000,stroke-width:2px,font-weight:bold
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:5px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:5px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:5px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:5px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:8px
+    %% Styling with forced height to prevent overlap
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:1px,padding:0px,min-height:0px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:1px,padding:0px,min-height:0px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:1px,padding:0px,min-height:0px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:1px,padding:0px,min-height:0px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:1px,padding:0px,min-height:0px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
