@@ -59,8 +59,8 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
-%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '62px', 'subgraphFontSize': '42px', 'edgeFontSize': '30px', 'nodeSpacing': 400, 'rankSpacing': 500, 'clusterPadding': 100 } } }%%
-graph LR
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '45px', 'subgraphFontSize': '40px', 'edgeFontSize': '30px', 'nodeSpacing': 500, 'rankSpacing': 600, 'clusterPadding': 150 } } }%%
+graph TB
     subgraph Endpoints["ENDPOINTS & AGENTS"]
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
         Linux["Linux Endpoint<br/>Wazuh Agent"]
@@ -168,14 +168,14 @@ graph LR
     MISPIntegration -.-> MISP
     IRISIOC -.->|IOC Sync| MISP
 
-    %% Adding internal padding to the boxes to prevent text touching borders
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:4px,padding:40px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:4px,padding:40px
-    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:4px,padding:40px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:4px,padding:40px
-    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:4px,padding:40px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:4px,padding:40px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:6px,padding:40px
+    %% USING 'width' and 'height' to force node size
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:4px,width:600px,height:150px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:4px,width:600px,height:150px
+    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:4px,width:600px,height:150px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:4px,width:600px,height:150px
+    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:4px,width:600px,height:150px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:4px,width:600px,height:150px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:6px,width:600px,height:150px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
