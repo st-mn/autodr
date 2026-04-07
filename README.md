@@ -59,6 +59,7 @@ AUTODR integrates **DFIR-IRIS** for multi-analyst investigation workflows:
 ## System Architecture
 
 ```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': { 'fontSize': '18px', 'subgraphFontSize': '22px', 'edgeFontSize': '16px' } } }%%
 graph TB
     subgraph Endpoints["ENDPOINTS & AGENTS"]
         MacOS["macOS Endpoint<br/>Wazuh Agent"]
@@ -167,14 +168,13 @@ graph TB
     MISPIntegration -.-> MISP
     IRISIOC -.->|IOC Sync| MISP
 
-    %% APPLYING FONT SIZE DIRECTLY TO CLASSES
-    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:2px,font-size:20px
-    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:2px,font-size:20px
-    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,font-size:20px
-    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px,font-size:20px
-    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:2px,font-size:20px
-    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:2px,font-size:20px
-    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:3px,font-size:20px
+    classDef endpoint fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef security fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef collection fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef gcp fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef automation fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef response fill:#ffe0b2,stroke:#e65100,stroke-width:2px
+    classDef casemanagement fill:#e3f2fd,stroke:#0d47a1,stroke-width:3px
 
     class MacOS,Linux,Debian,Windows endpoint
     class WazuhManager,Splunk,CrowdStrike,MISP security
@@ -182,7 +182,6 @@ graph TB
     class PubSub,Dataflow,BigQuery,VertexAI,CloudRun gcp
     class AUTODR,AutoHunt,AutoBook,MLPipeline,Shuffle automation
     class IRIS,IRISWeb,IRISTimeline,IRISIOC casemanagement
-    class AlertQueue,ShuffleWorkflows,ResponsePlaybooks,NotificationEngine,CrowdStrikeResponse,SplunkAlert,MISPIntegration response
 ```
 
 ## Modules
