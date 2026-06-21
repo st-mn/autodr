@@ -149,14 +149,14 @@ graph TB
 
 ### AutoBook: Incident Response Modules
 
-Sample runbooks (also available at [github.com/st-mn/autobook](https://github.com/st-mn/autobook)):
+Sample runbooks (also available at [github.com/st-mn/autobook](https://github.com/st-mn/autodr/tree/main/autobook/runbooks)):
 
 - `00_wannacry_ir_runbook.ipynb` — Wannacry Incident Response Automation
 
 
 ### AutoHunt: Threat Hunting Modules
 
-Sample hunts (also available at [github.com/st-mn/autohunt](https://github.com/st-mn/autohunt)):
+Sample hunts (also available at [github.com/st-mn/autohunt]((https://github.com/st-mn/autodr/tree/main/autohunt/hunts)):
 
 - `00_wannacry_hunt.py` — Wannacry Threat Hunt Automation
 
